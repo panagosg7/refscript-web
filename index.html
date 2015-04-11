@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html ng-app="mgcrea.ngStrapDocs">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS Plunker</title>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/editor.css">
+
+    <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.min.css">
+    <!--<link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.min.css">-->
+    <link rel="stylesheet" href="bower_components/acute-select/acute/acute.select/acute.select.css">
+
+    <script src="bower_components/angular/angular.js"></script>
+
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    
+    <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+    
+    <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+    
+    <script type="text/javascript" src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+    
+    <script type="text/javascript" src="bower_components/angular-ui-ace/ui-ace.js"></script> 
+
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    
+    <script type="text/javascript" src="bower_components/acute-select/acute/acute.select/acute.select.js"></script>
+    
+    <script src="app.js"></script>
+
+  </head>
+
+  <body ng-controller="MainCtrl">
+
+    <div class="bs-docs-section" ng-controller="NavbarDemoCtrl">
+      <div class="page-header">
+        <h1 id="navbars">RefScript <a class="small" href="https://github.com/UCSD-PL/RefScript" target="_blank">github</a></h1>
+      </div>
+
+      <!--<p>Add quick, dynamic navbar functionality to transition through active/inactive states.</p>-->
+
+      <a class="small edit-plunkr"
+                       data-module-name="mgcrea.ngStrapDocs"
+                       data-content-html-url="navbar/docs/navbar.demo.html"
+                       data-content-js-url="navbar/docs/navbar.demo.js"
+                       ng-plunkr data-title="edit in plunker"
+                                 data-placement="right" bs-tooltip></a></h3>
+
+      <!--<pre class="bs-example-scope">$location.path() = "{{$location.path()}}";</pre>-->
+      <div class="bs-example" append-source>
+        <nav class="navbar navbar-default" role="navigation" bs-navbar>
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Brand</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li data-match-route="/$"><a href="#/">Home</a></li>
+            <li data-match-route="/page-one"><a href="#/page-one">Page One</a></li>
+            <li data-match-route="/page-two.*"><a href="#/page-two/sub-a">Page Two</a></li>
+          </ul>
+        </nav>
+      </div>
+
+
+
+      <!--!-->
+      <!--Drop down example controller-->
+      <!--!-->
+
+
+      <div class="bs-docs-section" ng-controller="DropdownDemoCtrl">
+
+        <div class="bs-example" style="padding-bottom: 24px;" append-source>
+
+          <select class="ac-select testList" 
+                  ac-model="selectedTest" 
+                  ac-options="s.name for s in getAllTests()" 
+                  ac-settings="{ loadOnOpen: true, minWidth: '300px' }" 
+                  ac-change="testSelected(value)"></select>
+
+        </div>
+
+      </div>
+
+      <!--The editor-->
+
+      <div ui-ace="{
+      mode: 'typescript',
+      onLoad: aceLoaded,
+      onChange: aceChanged
+      }"></div>
+
+
+      <!--!-->
+      <!--Testing-->
+      <!--!-->
+
+      <div ng-controller="AlertDemoCtrl">
+          <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+          <button class='btn btn-default' ng-click="listFiles()">List files</button>
+          <button class='btn btn-default' ng-click="postTest()">Post files</button>
+          <button class='btn btn-default' ng-click="printTest()">Print text</button>
+      </div>
+
+
+
+
+
+      <!--<h2 id="navbars-usage">Usage</h2>-->
+      <!--<p>Append a <code>bs-navbar</code>attribute to any element to activate the directive.</p>-->
+      <!--<p>Use <code>data-match-route</code> attributes to any children navigation item that should be toggled active.</p>-->
+      <!--<div class="callout callout-info">-->
+      <!--  <h4>Heads up!</h4>-->
+      <!--  <p>The directives also supports <code>HTML5 mode</code>, you just have to drop the <code>href</code> dashes.</p>-->
+      <!--</div>-->
+
+
+      <!--<h3>Options</h3>-->
+      <!--<p>Options can be passed via data attributes, append the option name to <code>data-</code>, as in <code>data-route-attr=""</code>.</p>-->
+      <!--<div class="table-responsive">-->
+      <!--  <table class="table table-bordered table-striped">-->
+      <!--    <thead>-->
+      <!--      <tr>-->
+      <!--        <th style="width: 100px;">Name</th>-->
+      <!--        <th style="width: 100px;">type</th>-->
+      <!--        <th style="width: 50px;">default</th>-->
+      <!--        <th>description</th>-->
+      <!--      </tr>-->
+      <!--    </thead>-->
+      <!--    <tbody>-->
+      <!--      <tr>-->
+      <!--        <td>activeClass</td>-->
+      <!--        <td>string</td>-->
+      <!--        <td>active</td>-->
+      <!--        <td>Class to apply when the navigation item is active</td>-->
+      <!--      </tr>-->
+      <!--      <tr>-->
+      <!--        <td>routeAttr</td>-->
+      <!--        <td>string</td>-->
+      <!--        <td>data-match-route</td>-->
+      <!--        <td>Attribute to test against <code>$location.path()</code></td>-->
+      <!--      </tr>-->
+      <!--    </tbody>-->
+      <!--  </table>-->
+      <!--</div>-->
+
+      <!--<div class="callout callout-info">-->
+      <!--  <h4>Default options</h4>-->
+      <!--  <p>You can override global defaults for the plugin with <code>$navbarProvider.defaults</code></p>-->
+      <!--  <div class="highlight">-->
+      <!--    <pre class="bs-exemple-code">-->
+      <!--  <code class="javascript" highlight-block>-->
+      <!--    angular.module('myApp')-->
+      <!--    .config(function($navbarProvider) {-->
+      <!--      angular.extend($navbarProvider.defaults, {-->
+      <!--        activeClass: 'in'-->
+      <!--      });-->
+      <!--    })-->
+      <!--  </code>-->
+      <!--    </pre>-->
+      <!--  </div>-->
+      <!--</div>-->
+
+    </div>
+
+
+  </body>
+
+</html>
