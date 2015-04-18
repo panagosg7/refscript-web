@@ -6,21 +6,20 @@
 
 // 0. List files
 define("LIST_FILES", 0);
-// 0. Fetch file
+// 1. Fetch file
 define("FETCH_FILE", 1);
-// 1. Verify file
+// 2. Verify file
 define("VERIFY_FILE", 2);
 
 
-function execCommand($tsrc, $bindir, $log) {
+function verifyCmd($tsrc, $bindir, $logfile) {
   $cmd_lang    = 'LANG=en_US.UTF-8'; 
   $cmd_path    = 'PATH='.$bindir.':$PATH';
-  //$packagedir  = $hsenvdir . '/lib/ghc-7.6.3/package.conf.d';
-  //$cmd_packdir = 'GHC_PACKAGE_PATH='.$packagedir.':' ;
   $cmd_checker = 'rsc';
+  // $cmd_checker = 'rsc';
   $pipe_out    = '>';
   $pipe_err    = '2>&1';
-  $cmd         = implode(' ', array($cmd_lang,$cmd_path,$cmd_checker,$tsrc,$pipe_out,$log,$pipe_err));
+  $cmd         = implode(' ', array($cmd_lang,$cmd_path,$cmd_checker,$tsrc,$pipe_out,$logfile,$pipe_err));
   return $cmd;
 }
 
@@ -57,12 +56,11 @@ function getCrash($logfile){
 $raw_data       = file_get_contents("php://input");
 $data           = json_decode($raw_data);
 
-$rscdir         = "/home/pvekris/Documents/Research/rsc/RefScript";
-$bindir         = $rscdir."/.cabal-sandbox/bin";
+$bindir         = "/var/www/refscript-bin/RefScript/.cabal-sandbox/bin";
 $vardir         = "/var/tmp";
-$testdir        = $rscdir."/tests";
+$testdir        = "/var/www/refscript-bin/RefScript/tests";
 
-$log            = "log";
+$logdir         = "./log";
 
 if ($data->action == LIST_FILES) {
 
@@ -88,7 +86,6 @@ else if ($data->action == FETCH_FILE) {
 }
 else if ($data->action == VERIFY_FILE) {
 
-
   // Generate temporary filenames 
   $t            = time();
   $tsrc         = $vardir.'/'.$t.'.ts';
@@ -96,13 +93,16 @@ else if ($data->action == VERIFY_FILE) {
   $tout         = $tsrc.'.out';
   $terr         = $tsrc.'.err';
   $tjson        = $tsrc.'.json';
+  $logfile      = $tsrc.'.log';
 
   writeFileRaw($tsrc, $data->program);
 
   // Run solver
-  $cmd          = execCommand($tsrc,$bindir,$log);
 
-  echo $cmd;
+  $ver_cmd      = verifyCmd($tsrc,$bindir,$logfile);
+  error_log($ver_cmd);
+  $out          = shell_exec($ver_cmd);  
+  echo shell_exec('cat '.$logfile);
 
   //writeFileRaw("cmdlog", $cmd);
   //$res              = shell_exec($cmd);
